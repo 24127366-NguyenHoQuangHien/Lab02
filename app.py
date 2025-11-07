@@ -15,9 +15,7 @@ st.set_page_config(page_title="Mini-travel application", page_icon="🌏", layou
 MODEL = "gpt-oss:20b"
 client = Client(host='https://ojtgl-34-125-220-233.a.free.pinggy.link')
 
-# ═══════════════════════════════════════════════
 # FIREBASE SETUP
-# ═══════════════════════════════════════════════
 @st.cache_resource
 def get_firebase_clients():
     firebase_cfg = st.secrets["firebase_client"]
@@ -32,9 +30,8 @@ def get_firebase_clients():
 
 auth, db = get_firebase_clients()
 
-# ═══════════════════════════════════════════════
+
 # LLM FUNCTIONS
-# ═══════════════════════════════════════════════
 def generate_itinerary(origin, destination, start_date, end_date, interests, pace):
     """Generate travel itinerary using LLM"""
     prompt = f"""Generate a detailed day-by-day travel itinerary for a trip.
@@ -73,9 +70,8 @@ def ollama_chat(history_messages: list[dict]):
     except requests.RequestException as e:
         return f"❌ Lỗi kết nối: {e}"
 
-# ═══════════════════════════════════════════════
+
 # FIREBASE STORAGE FUNCTIONS
-# ═══════════════════════════════════════════════
 def save_itinerary(uid: str, itinerary_text: str, metadata: dict):
     """Save itinerary to Firebase"""
     doc = {
@@ -116,9 +112,8 @@ def load_last_messages(uid: str, limit: int = 8):
         out.append({"role": data.get("role", "assistant"), "content": data.get("content", "")})
     return out
 
-# ═══════════════════════════════════════════════
+
 # SESSION STATE INITIALIZATION
-# ═══════════════════════════════════════════════
 if "user" not in st.session_state:
     st.session_state.user = None
 if "messages" not in st.session_state:
@@ -134,9 +129,7 @@ if "show_login" not in st.session_state:
 if "current_itinerary" not in st.session_state:
     st.session_state.current_itinerary = None
 
-# ═══════════════════════════════════════════════
 # LOGIN / SIGNUP FORMS
-# ═══════════════════════════════════════════════
 def login_form():
     st.markdown("<h3 style='text-align: center;'>🔐 Đăng nhập</h3>", unsafe_allow_html=True)
     with st.form("login_form", clear_on_submit=False):
@@ -200,9 +193,7 @@ def signup_form():
             except Exception as e:
                 st.error(f"❌ Đăng ký thất bại: {e}")
 
-# ═══════════════════════════════════════════════
 # CHAT DIALOG
-# ═══════════════════════════════════════════════
 @st.dialog("💬 Trợ lý AI", width="large")
 def chat_dialog():
     if not st.session_state.user:
@@ -231,9 +222,8 @@ def chat_dialog():
         
         st.rerun()
 
-# ═══════════════════════════════════════════════
+
 # MAIN UI
-# ═══════════════════════════════════════════════
 st.markdown("<h1 style='text-align: center; color: #0E86D4;'>🌏 Mini-travel application</h1>", unsafe_allow_html=True)
 st.caption("<p style='text-align: center;'>Plan your dream trip with AI-powered itineraries</p>", unsafe_allow_html=True)
 
@@ -247,9 +237,7 @@ if not st.session_state.user:
             login_form()
     st.stop()
 
-# ═══════════════════════════════════════════════
 # LOGGED IN INTERFACE
-# ═══════════════════════════════════════════════
 # Top bar
 col1, col2 = st.columns([3, 1])
 with col1:
@@ -394,9 +382,8 @@ with stylable_container(
 if st.session_state.chat_open:
     chat_dialog()
 
-# ═══════════════════════════════════════════════
+
 # CUSTOM CSS
-# ═══════════════════════════════════════════════
 st.markdown("""
 <style>
 /* Tổng thể */
